@@ -11,10 +11,15 @@ import com.example.newssourceapp.R
 import com.example.newssourceapp.data.model.Article
 import com.example.newssourceapp.databinding.FragmentNewsListItemBinding
 
+/**
+ * An adapter class for the NewsList recyclerview items. The data from the fragment to the adapter
+ * is being passed through the DiffUtil's [AsyncListDiffer].
+ */
 class NewsListItemAdapter : RecyclerView.Adapter<NewsListItemAdapter.NewsListItemViewHolder>() {
 
     inner class NewsListItemViewHolder(val binding: FragmentNewsListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
+    // region overridden methods
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsListItemViewHolder =
         NewsListItemViewHolder(FragmentNewsListItemBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -38,6 +43,10 @@ class NewsListItemAdapter : RecyclerView.Adapter<NewsListItemAdapter.NewsListIte
 
     override fun getItemCount(): Int = differ.currentList.size
 
+    // endregion
+
+    // region DiffUtil
+
     private val diffUtilCallback = object : DiffUtil.ItemCallback<Article>() {
         override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
             return oldItem.url == newItem.url
@@ -48,12 +57,14 @@ class NewsListItemAdapter : RecyclerView.Adapter<NewsListItemAdapter.NewsListIte
         }
     }
 
+    // Exposed to the outer world - adapter data can be updated with differ.submitList(items)
+    val differ = AsyncListDiffer(this, diffUtilCallback)
+
+    // endregion
+
     private var onItemClickListener: ((Article) -> Unit)? = null
 
     fun setOnItemClickListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
     }
-
-    // Exposed to the outer world - adapter data can be updated with differ.submitList(items)
-    val differ = AsyncListDiffer(this, diffUtilCallback)
 }

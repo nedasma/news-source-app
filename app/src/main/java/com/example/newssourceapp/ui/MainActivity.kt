@@ -20,6 +20,15 @@ import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "MainActivity"
 
+/**
+ * The activity of the application in this case acts a single user-focused thing to do, while the
+ * responsibility of the screens is delegated to the fragments. As there's one single "activity" for
+ * the user to do (scroll through news, click on them and read), there's no real necessity for this
+ * app to have multiple activities.
+ *
+ * However, this activity is still of great value - it acts as an "enabler" (or an entry point) for
+ * Dagger dependency injection.
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     val viewModel: NewsListViewModel by viewModels()
 
+    // region overridden methods
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
@@ -52,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+    // endregion
 
     fun logFirebaseRegistrationToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->

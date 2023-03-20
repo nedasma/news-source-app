@@ -1,12 +1,11 @@
 package com.example.newssourceapp.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -26,7 +25,8 @@ import kotlinx.coroutines.launch
 private const val TOTAL_PAGE_COUNT = 20
 
 /**
- *
+ * The fragment containing all the UI logic for displaying a list of news items coming from the
+ * [viewModel] to the user.
  */
 class NewsListFragment : Fragment() {
 
@@ -35,6 +35,7 @@ class NewsListFragment : Fragment() {
     private lateinit var viewModel: NewsListViewModel
     private var isScrolling = false
 
+    // region overridden methods
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -84,6 +85,8 @@ class NewsListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    // endregion
 
     // The scroll listener allows pagination of queries, so that once the end of the list is reached,
     // the VM is informed that a new query with pagination parameter needs to be requested and returned

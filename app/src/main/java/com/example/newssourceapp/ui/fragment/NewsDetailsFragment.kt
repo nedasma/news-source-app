@@ -20,7 +20,8 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 
 /**
- *
+ * The fragment of the details of the specific news item - contains all the UI methods in order to
+ * display the data properly for the user.
  */
 class NewsDetailsFragment : Fragment() {
 

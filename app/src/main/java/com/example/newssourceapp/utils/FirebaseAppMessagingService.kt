@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
-import android.graphics.Color
 import android.media.RingtoneManager
 import android.net.Uri
 import android.util.Log
@@ -18,6 +17,9 @@ import java.util.Random
 
 private const val TAG = "FirebaseAppMessagingService"
 
+/**
+ * A helper class for handling everything related to the Firebase Cloud Messaging service.
+ */
 class FirebaseAppMessagingService : FirebaseMessagingService() {
 
     /**
@@ -32,13 +34,16 @@ class FirebaseAppMessagingService : FirebaseMessagingService() {
        // sendRegistrationToServer(token)
     }
 
+    /**
+     * This is called when the FCM message is received while the app is in the foreground. The [message]
+     * can contain some data payload in order to customise the notification or just a simple notification
+     * to be displayed in the notification tray.
+     */
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        var notificationUrl = ""
-        var notificationUrlOpenType = ""
-
         Log.d(TAG, "From: ${message.from}")
+        val channelId = getString(R.string.default_notification_channel_id)
 
         // Check if message contains a data payload.
         if (message.data.isNotEmpty()) {
@@ -46,48 +51,40 @@ class FirebaseAppMessagingService : FirebaseMessagingService() {
 
             val title = if (message.data["title"].isNullOrBlank()) getString(R.string.app_name) else message.data["title"]
             val text = if (message.data["message"].isNullOrBlank()) "" else message.data["message"]
-            val rubric = if (message.data["rubric"].isNullOrBlank() && message.data["rubric"]?.isNotBlank() == true) "" else message.data["rubric"]
-            val color = message.data["color"].orEmpty()
 
-            if (message.data["url"] != null) {
-                notificationUrl = message.data["url"].toString()
-                notificationUrlOpenType = "INSIDE"
-            }
-
-            val channelId = getString(R.string.default_notification_channel_id)
             sendNotification(
                 title.orEmpty(),
                 text.orEmpty(),
-                rubric.orEmpty(),
                 channelId,
-                notificationUrl,
-                notificationUrlOpenType,
-                color
             )
-        }
+        } else if (message.notification != null) {
+            // Check if message contains a notification payload.
+            val notification = message.notification
 
-        // Check if message contains a notification payload.
-        message.notification?.let {
-            Log.d(TAG, "Message Notification Body: ${it.body}")
+            Log.d(TAG, "Message Notification Body: ${notification?.body}")
+
+            sendNotification(
+                notification?.title.orEmpty(),
+                notification?.body.orEmpty(),
+                channelId,
+            )
         }
     }
 
+    /**
+     * Sends the notification through the notification channel (by provided its [channelId]).
+     * The notification contains a [title] and some [text] - all other custom parameters are set as
+     * default.
+     */
     private fun sendNotification(
         title: String,
         text: String,
-        rubric: String,
         channelId: String,
-        notificationUrl: String,
-        notificationUrlOpenType: String,
-        color: String
     ) {
         val intent = Intent(this.applicationContext, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        if (notificationUrl.isNotEmpty() && notificationUrlOpenType.isNotEmpty()) {
-            intent.putExtra("notificationUrl", notificationUrl)
-            intent.putExtra("notificationType", notificationUrlOpenType)
-        }
+
         val randomId = Random().nextInt(9999 - 1000) + 1000
 
         val pendingIntent = PendingIntent.getActivity(
@@ -100,16 +97,12 @@ class FirebaseAppMessagingService : FirebaseMessagingService() {
         val defaultSoundUri: Uri? = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         val notificationBuilder = NotificationCompat.Builder(this.applicationContext, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(rubric)
-            .setContentText(title)
-            .setColor(Color.parseColor(color))
+            .setSmallIcon(R.drawable.ic_stat_name)
+            .setContentTitle(title)
+            .setContentText(text)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
-            .setStyle(
-                NotificationCompat.BigTextStyle()
-                .bigText(text))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .build()

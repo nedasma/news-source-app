@@ -1,0 +1,28 @@
+<resources>
+    <dimen name="zero_dp">0dp</dimen>
+
+    <dimen name="text_size_small">5sp</dimen>
+    <dimen name="text_size_normal">12sp</dimen>
+    <dimen name="text_size_large">15sp</dimen>
+    <dimen name="text_size_xlarge">18sp</dimen>
+
+    <dimen name="rv_side_margin">15dp</dimen>
+    <dimen name="rv_top_margin">15dp</dimen>
+    <dimen name="article_margin">10dp</dimen>
+    <dimen name="image_margin">7dp</dimen>
+
+    <dimen name="image_width">120dp</dimen>
+    <dimen name="image_large_height">200dp</dimen>
+    <dimen name="item_height">150dp</dimen>
+    <dimen name="layout_width_large">200dp</dimen>
+    <dimen name="layout_width_small">100dp</dimen>
+    <dimen name="article_title_height">80dp</dimen>
+    <dimen name="article_title_width">200dp</dimen>
+    <dimen name="item_wrapper_height">115dp</dimen>
+
+    <dimen name="cardview_elevation">10dp</dimen>
+    <dimen name="cardview_radius">4dp</dimen>
+
+    <dimen name="news_details_height">400dp</dimen>
+    <dimen name="article_authors_dates_height">20dp</dimen>
+</resources>

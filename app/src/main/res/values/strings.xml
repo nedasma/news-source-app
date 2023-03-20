@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">NewsSourceApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="first_fragment_label">News List</string>
+    <string name="second_fragment_label">News Details</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="photo_title">Photo description placeholder</string>
+    <string name="placeholder_text">Text article placeholder</string>
+    <string name="placeholder_text_main">Text description placeholder</string>
+    <string name="placeholder_author">Author A. Authorson</string>
+    <string name="date">2023–03–18 16:08:00</string>
+    <string name="button_text">READ FULL ARTICLE ONLINE</string>
+    <string name="error_text">Error!</string>
+
+    <string name="fcm_not_registered_text">App notifications disabled. The app will not send any notifications from it.</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+
+    <string name="test_text">Test Crash</string>
+</resources>
